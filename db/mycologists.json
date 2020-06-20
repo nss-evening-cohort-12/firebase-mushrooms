@@ -1,0 +1,17 @@
+{
+  "mycologist1": {
+    "name": "Luke",
+    "age": "100000",
+    "uid": "2UJIer9yb6br9oHpRmlYMlRs6Ss1"
+  },
+  "mycologist2": {
+    "name": "Michael",
+    "age": "120",
+    "uid": "2454363456"
+  },
+  "mycologist3": {
+    "name": "Matt",
+    "age": "10",
+    "uid": "472572457"
+  }
+}
