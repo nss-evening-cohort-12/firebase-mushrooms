@@ -4,3 +4,7 @@
 body {
   background-color: darken($color: blue, $amount: 6);
 }
+
+.hide {
+  display: none;
+}
