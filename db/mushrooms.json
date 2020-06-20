@@ -1,0 +1,26 @@
+{
+  "mushroom1": {
+    "name": "Maitake",
+    "size": "s",
+    "location": "woods",
+    "weight": 34
+  },
+  "mushroom2": {
+    "name": "Cremini",
+    "size": "m",
+    "location": "woods",
+    "weight": 120
+  },
+  "mushroom3": {
+    "name": "Portobello",
+    "size": "xl",
+    "location": "woods",
+    "weight": 200
+  },
+  "mushroom4": {
+    "name": "Morel",
+    "size": "xs",
+    "location": "woods",
+    "weight": 3
+  }
+}
