@@ -1,8 +1,11 @@
 @import "~bootstrap/scss/bootstrap";
 @import "~@fortawesome/fontawesome-free/css/all.min.css";
 
+@import url('https://fonts.googleapis.com/css2?family=Krona+One&display=swap');
+
 body {
   background-color: darken($color: brown, $amount: 10);
+  font-family: 'Krona One', sans-serif;
 }
 
 .hide {
