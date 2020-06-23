@@ -1,4 +1,5 @@
 import mycologistComponent from '../mycologist/mycologist';
+import singleMycologist from '../singleMycologist/singleMycologist';
 import mycologistData from '../../helpers/data/mycologistData';
 import utils from '../../helpers/utils';
 
@@ -20,6 +21,8 @@ const buildHut = () => {
       domString += '</div></div>';
 
       utils.printToDom('#hut', domString);
+
+      $('body').on('click', '.myco-card', singleMycologist.buildMycologist);
     })
     .catch((err) => console.error('getMycologists failed', err));
 };
