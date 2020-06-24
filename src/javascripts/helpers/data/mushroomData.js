@@ -8,18 +8,17 @@ const getMushrooms = () => new Promise((resolve, reject) => {
     .then((response) => {
       const mushroomObjects = response.data;
       const mushrooms = [];
-      Object.keys(mushroomObjects).forEach((mushroomId) => {
-        // adding the id onto each object
-        mushroomObjects[mushroomId].id = mushroomId;
-        mushrooms.push(mushroomObjects[mushroomId]);
-        // put the object onto the mushrooms array
-      });
-      // take the response
-      // format it into an array of objects
-      // resolve the new array of objects
+      if (mushroomObjects) {
+        Object.keys(mushroomObjects).forEach((mushroomId) => {
+          mushroomObjects[mushroomId].id = mushroomId;
+          mushrooms.push(mushroomObjects[mushroomId]);
+        });
+      }
       resolve(mushrooms);
     })
     .catch((err) => reject(err));
 });
 
-export default { getMushrooms };
+const deleteMushroom = (mushroomId) => axios.delete(`${baseUrl}/mushrooms/${mushroomId}.json`);
+
+export default { getMushrooms, deleteMushroom };
