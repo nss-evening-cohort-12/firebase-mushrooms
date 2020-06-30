@@ -7,8 +7,8 @@ const baseUrl = apiKeys.firebaseConfig.databaseURL;
 
 const getMushrooms = () => new Promise((resolve, reject) => {
   axios.get(`${baseUrl}/mushrooms.json`)
-    .then((response) => {
-      const mushrooms = utils.convertFirebaseCollection(response.data);
+    .then(({ data }) => {
+      const mushrooms = utils.convertFirebaseCollection(data);
 
       resolve(mushrooms);
     })
