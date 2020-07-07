@@ -1,21 +1,13 @@
 import axios from 'axios';
 import apiKeys from '../apiKeys.json';
 
+import utils from '../utils';
+
 const baseUrl = apiKeys.firebaseConfig.databaseURL;
 
 const getMushrooms = () => new Promise((resolve, reject) => {
   axios.get(`${baseUrl}/mushrooms.json`)
-    .then((response) => {
-      const mushroomObjects = response.data;
-      const mushrooms = [];
-      if (mushroomObjects) {
-        Object.keys(mushroomObjects).forEach((mushroomId) => {
-          mushroomObjects[mushroomId].id = mushroomId;
-          mushrooms.push(mushroomObjects[mushroomId]);
-        });
-      }
-      resolve(mushrooms);
-    })
+    .then(({ data }) => resolve(utils.convertFirebaseCollection(data)))
     .catch((err) => reject(err));
 });
 

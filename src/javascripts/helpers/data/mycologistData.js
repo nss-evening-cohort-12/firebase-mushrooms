@@ -1,19 +1,13 @@
 import axios from 'axios';
 import apiKeys from '../apiKeys.json';
 
+import utils from '../utils';
+
 const baseUrl = apiKeys.firebaseConfig.databaseURL;
 
 const getMycologists = () => new Promise((resolve, reject) => {
   axios.get(`${baseUrl}/mycologists.json`)
-    .then((response) => {
-      const mycoObjects = response.data;
-      const mycologists = [];
-      Object.keys(mycoObjects).forEach((mycologistId) => {
-        mycoObjects[mycologistId].id = mycologistId;
-        mycologists.push(mycoObjects[mycologistId]);
-      });
-      resolve(mycologists);
-    })
+    .then(({ data }) => resolve(utils.convertFirebaseCollection(data)))
     .catch((err) => reject(err));
 });
 
