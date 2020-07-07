@@ -21,4 +21,6 @@ const getMushrooms = () => new Promise((resolve, reject) => {
 
 const deleteMushroom = (mushroomId) => axios.delete(`${baseUrl}/mushrooms/${mushroomId}.json`);
 
-export default { getMushrooms, deleteMushroom };
+const addMushroom = (newMushroomObj) => axios.post(`${baseUrl}/mushrooms.json`, newMushroomObj);
+
+export default { getMushrooms, deleteMushroom, addMushroom };
