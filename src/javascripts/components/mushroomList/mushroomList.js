@@ -1,7 +1,10 @@
 import mushroomComponent from '../mushroom/mushroom';
 import newMushroom from '../newMushroom/newMushroom';
+
 import mushroomData from '../../helpers/data/mushroomData';
+import mycologistMushroomData from '../../helpers/data/mycologistMushroomData';
 import smash from '../../helpers/data/smash';
+
 import utils from '../../helpers/utils';
 
 const removeShroomEvent = (e) => {
@@ -36,8 +39,35 @@ const addShroomEvent = (e) => {
     .catch((err) => console.error('could not add mushroom', err));
 };
 
+const mycoMushroomController = (e) => {
+  if (e.target.checked) {
+    const newMycologistMushroom = {
+      mushroomId: e.target.closest('.card').id,
+      mycologistUid: e.target.dataset.mycologistUid,
+    };
+
+    mycologistMushroomData.addMycologistMushroom(newMycologistMushroom)
+      .then(() => {
+        // eslint-disable-next-line no-use-before-define
+        buildForest();
+        utils.printToDom('#single-myco', '');
+        utils.printToDom('#new-shroom', '');
+      })
+      .catch((err) => console.error('could not create myco mushroom', err));
+  } else {
+    mycologistMushroomData.deleteMycoMushroom(e.target.id)
+      .then(() => {
+        // eslint-disable-next-line no-use-before-define
+        buildForest();
+        utils.printToDom('#single-myco', '');
+        utils.printToDom('#new-shroom', '');
+      })
+      .catch((err) => console.error('delete myco mushroom failed', err));
+  }
+};
+
 const buildForest = () => {
-  mushroomData.getMushrooms()
+  smash.getMushroomsWithOwners()
     .then((mushrooms) => {
       let domString = `
         <h2 class="text-center">Forest</h2>
@@ -52,11 +82,15 @@ const buildForest = () => {
       domString += '</div>';
 
       utils.printToDom('#forest', domString);
-      $('body').one('click', '.delete-shroom', removeShroomEvent);
-      $('body').one('click', '#mush-creator', addShroomEvent);
-      $('body').one('click', '#show-add-mush', newMushroom.showForm);
     })
-    .catch((err) => console.error('get mushrooms broke :/', err));
+    .catch((err) => console.error('get mushroomsWithOwners broke :/', err));
 };
 
-export default { buildForest };
+const forestEvents = () => {
+  $('body').on('click', '.delete-shroom', removeShroomEvent);
+  $('body').on('click', '#mush-creator', addShroomEvent);
+  $('body').on('click', '#show-add-mush', newMushroom.showForm);
+  $('body').on('click', '.myco-shroom-checkbox', mycoMushroomController);
+};
+
+export default { buildForest, forestEvents };
