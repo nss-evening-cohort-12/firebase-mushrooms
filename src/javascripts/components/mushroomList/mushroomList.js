@@ -1,3 +1,4 @@
+import editMushroom from '../editMushroom/editMushroom';
 import mushroomComponent from '../mushroom/mushroom';
 import newMushroom from '../newMushroom/newMushroom';
 
@@ -18,6 +19,32 @@ const removeShroomEvent = (e) => {
       utils.printToDom('#single-myco', '');
     })
     .catch((err) => console.error('could not delete mushroom', err));
+};
+
+const editShroomEvent = (e) => {
+  e.preventDefault();
+
+  // get the id of the mushroom (for updating purposes)
+  const mushroomid = e.target.closest('.edit-mushroom').id;
+  // create the 'modified' mushroom
+  const editedMush = {
+    name: $('#edit-mush-name').val(),
+    size: $('#edit-mush-size').val(),
+    location: $('#edit-mush-location').val(),
+    weight: $('#edit-mush-weight').val() * 1,
+  };
+  // pass those to an update mushroom data function
+  mushroomData.updateMushroom(mushroomid, editedMush)
+    .then(() => {
+      // eslint-disable-next-line no-use-before-define
+      buildForest();
+      utils.printToDom('#edit-shroom', '');
+    })
+    .catch((err) => console.error('could not edit mushroom', err));
+};
+
+const showShroomForm = (e) => {
+  editMushroom.showForm(e.target.closest('.card').id);
 };
 
 const addShroomEvent = (e) => {
@@ -88,7 +115,9 @@ const buildForest = () => {
 
 const forestEvents = () => {
   $('body').on('click', '.delete-shroom', removeShroomEvent);
+  $('body').on('click', '.edit-shroom', showShroomForm);
   $('body').on('click', '#mush-creator', addShroomEvent);
+  $('body').on('click', '#mush-editor', editShroomEvent);
   $('body').on('click', '#show-add-mush', newMushroom.showForm);
   $('body').on('click', '.myco-shroom-checkbox', mycoMushroomController);
 };
