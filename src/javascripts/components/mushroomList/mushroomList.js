@@ -1,3 +1,6 @@
+import firebase from 'firebase/app';
+import 'firebase/storage';
+
 import editMushroom from '../editMushroom/editMushroom';
 import mushroomComponent from '../mushroom/mushroom';
 import newMushroom from '../newMushroom/newMushroom';
@@ -50,17 +53,23 @@ const showShroomForm = (e) => {
 const addShroomEvent = (e) => {
   e.preventDefault();
 
+  const file = document.getElementById('mush-image').files[0];
+  const image = file.name;
+
   const newMush = {
     name: $('#mush-name').val(),
     size: $('#mush-size').val(),
     location: $('#mush-location').val(),
     weight: $('#mush-weight').val() * 1,
+    image,
   };
 
   mushroomData.addMushroom(newMush)
     .then(() => {
-      // eslint-disable-next-line no-use-before-define
-      buildForest();
+      firebase.storage().ref(`mushrooms/${image}`).put(file).then(() => {
+        // eslint-disable-next-line no-use-before-define
+        buildForest();
+      });
       utils.printToDom('#new-shroom', '');
     })
     .catch((err) => console.error('could not add mushroom', err));
@@ -93,6 +102,18 @@ const mycoMushroomController = (e) => {
   }
 };
 
+const showImages = (mushrooms) => {
+  mushrooms.forEach((mushroom) => {
+    if (!mushroom.image) return;
+
+    const storageRef = firebase.storage().ref(`mushrooms/${mushroom.image}`);
+
+    storageRef.getDownloadURL().then((url) => {
+      $(`#${mushroom.id} .mush-img`).attr('src', url);
+    });
+  });
+};
+
 const buildForest = () => {
   smash.getMushroomsWithOwners()
     .then((mushrooms) => {
@@ -109,6 +130,7 @@ const buildForest = () => {
       domString += '</div>';
 
       utils.printToDom('#forest', domString);
+      showImages(mushrooms);
     })
     .catch((err) => console.error('get mushroomsWithOwners broke :/', err));
 };
