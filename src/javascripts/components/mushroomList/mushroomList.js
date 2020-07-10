@@ -53,25 +53,42 @@ const showShroomForm = (e) => {
 const addShroomEvent = (e) => {
   e.preventDefault();
 
+  const name = $('#mush-name').val();
+  const size = $('#mush-size').val();
+  const location = $('#mush-location').val();
+  const weight = $('#mush-weight').val() * 1;
   const file = document.getElementById('mush-image').files[0];
+
+  if (!name || !size || !location || !weight || !file) {
+    $('#new-mush-validate').fadeIn();
+    $('#new-mush-validate').html('*All fields are required');
+    setTimeout(() => {
+      $('#new-mush-validate').fadeOut();
+    }, 2000);
+    return;
+  }
+
   const image = file.name;
+  const ref = firebase.storage().ref(`mushrooms/${image}`);
 
   const newMush = {
-    name: $('#mush-name').val(),
-    size: $('#mush-size').val(),
-    location: $('#mush-location').val(),
-    weight: $('#mush-weight').val() * 1,
-    image,
+    name,
+    size,
+    location,
+    weight,
+    image: '',
   };
 
-  mushroomData.addMushroom(newMush)
-    .then(() => {
-      firebase.storage().ref(`mushrooms/${image}`).put(file).then(() => {
+  ref.put(file).then(() => {
+    ref.getDownloadURL().then((url) => {
+      newMush.image = url;
+      mushroomData.addMushroom(newMush).then(() => {
         // eslint-disable-next-line no-use-before-define
         buildForest();
       });
-      utils.printToDom('#new-shroom', '');
-    })
+    });
+    utils.printToDom('#new-shroom', '');
+  })
     .catch((err) => console.error('could not add mushroom', err));
 };
 
@@ -102,24 +119,11 @@ const mycoMushroomController = (e) => {
   }
 };
 
-const showImages = (mushrooms) => {
-  mushrooms.forEach((mushroom) => {
-    if (!mushroom.image) return;
-
-    const storageRef = firebase.storage().ref(`mushrooms/${mushroom.image}`);
-
-    storageRef.getDownloadURL().then((url) => {
-      $(`#${mushroom.id} .mush-img`).attr('src', url);
-    });
-  });
-};
-
 const buildForest = () => {
   smash.getMushroomsWithOwners()
     .then((mushrooms) => {
       let domString = `
         <h2 class="text-center">Forest</h2>
-        <button class="btn btn-success" id="show-add-mush"><i class="fas fa-ad"></i> New Shroom</button>
         <div class="d-flex flex-wrap">
       `;
 
@@ -130,7 +134,6 @@ const buildForest = () => {
       domString += '</div>';
 
       utils.printToDom('#forest', domString);
-      showImages(mushrooms);
     })
     .catch((err) => console.error('get mushroomsWithOwners broke :/', err));
 };

@@ -4,7 +4,7 @@ const mushroomMaker = (mushroom) => {
   let domString = `
     <div class="col-3">
       <div class="card border-0 rounded-0 bg-dark text-light" id=${mushroom.id}>
-      <image class="card-img-top mush-img">
+      <image class="card-img-top mush-img" src=${mushroom.image ? mushroom.image : ''}>
         <div class="card-header text-center">${mushroom.name}</div>
           <div class="card-body">
             <h5 class="card-title">${mushroom.location}</h5>
