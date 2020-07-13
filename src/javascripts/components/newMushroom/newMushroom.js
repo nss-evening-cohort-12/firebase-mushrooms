@@ -1,5 +1,7 @@
 import utils from '../../helpers/utils';
 
+import './newMushroom.scss';
+
 function imageInputWatcher() {
   $('#mush-image-label').html(this.files[0].name);
 }
@@ -23,11 +25,12 @@ const showForm = () => {
         <label for="mush-weight">Weight (in grams):</label>
         <input type="number" class="form-control" id="mush-weight" placeholder="20">
       </div>
-      <div class="custom-file">
+      <div class="custom-file form-group">
         <input type="file" class="custom-file-input" id="mush-image">
-        <label class="custom-file-label" for="mush-image" id="mush-image-label">Choose file</label>
+        <label class="custom-file-label" for="mush-image" id="mush-image-label">Mushroom Image</label>
       </div>
-      <button type="submit" class="btn btn-primary" id="mush-creator">Submit</button>
+      <button type="submit" class="btn btn-primary col-md-3" id="mush-creator">Submit</button>
+      <p class="col-md-9" id="new-mush-validate"></p>
     </form>
   `;
 

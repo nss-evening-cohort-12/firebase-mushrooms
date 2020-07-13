@@ -2,7 +2,7 @@ import './mushroom.scss';
 
 const mushroomMaker = (mushroom) => {
   let domString = `
-    <div class="col-3">
+    <div class="col-6 mb-2">
       <div class="card border-0 rounded-0 bg-dark text-light" id=${mushroom.id}>
       <image class="card-img-top mush-img" src=${mushroom.image ? mushroom.image : ''}>
         <div class="card-header text-center">${mushroom.name}</div>
@@ -10,12 +10,12 @@ const mushroomMaker = (mushroom) => {
             <h5 class="card-title">${mushroom.location}</h5>
             <p class="card-text">This mushroom is of size <b>${mushroom.size}</b> and weighs <b>${mushroom.weight}</b> grams</p>
             <p>Owners: </p>
-            <form>
+            <form class="row">
   `;
 
   mushroom.mycologists.forEach((mycologist) => {
     domString += `
-      <div class="form-check">
+      <div class="form-check col-3">
         <input type="checkbox" class="form-check-input myco-shroom-checkbox" id="${mycologist.mycologistMushroomId}" data-mycologist-uid=${mycologist.uid} ${mycologist.isChecked ? 'checked' : ''}>
         <label class="form-check-label" for="${mycologist.mycologistMushroomId}">${mycologist.name}</label>
       </div>
