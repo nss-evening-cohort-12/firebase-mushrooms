@@ -24,13 +24,12 @@ const getSingleMycoWithShrooms = (mycologistId) => new Promise((resolve, reject)
 
       // b. Pass that array of promises to Promise.all and chain .then() off of it
       Promise.all(allMyPromises)
-        // c. What comes back is an array of fulfilled promeses, in the order that the array you gave to Promise.all
-        .then((fulfilledPromises) => {
-          // d. mycologistMushroomData was first in `allMyPromises` so it's first in the fulfilled return
-          const mycoShrooms = fulfilledPromises[0];
-          // e. mushroomData was second, so it's second int the fulfilled data
-          const allMushrooms = fulfilledPromises[1];
-
+        // c. you know what, let's use array destructuring assignment!!!
+        // this is equivilent to:
+        //    const [mycoShrooms, allMushrooms] = fulfilledPromises;
+        //    or const mycoShrooms = fulfilledPromises[0];
+        //       const allMushrooms = fulfilledPromises[1];
+        .then(([mycoShrooms, allMushrooms]) => {
           // f. This logic is exactly the same
           mycoShrooms.forEach((mycoShroom) => {
             const mushroom = allMushrooms.find((m) => m.id === mycoShroom.mushroomId);
