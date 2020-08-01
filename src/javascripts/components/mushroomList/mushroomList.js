@@ -1,3 +1,6 @@
+import firebase from 'firebase/app';
+import 'firebase/storage';
+
 import editMushroom from '../editMushroom/editMushroom';
 import mushroomComponent from '../mushroom/mushroom';
 import newMushroom from '../newMushroom/newMushroom';
@@ -50,19 +53,42 @@ const showShroomForm = (e) => {
 const addShroomEvent = (e) => {
   e.preventDefault();
 
+  const name = $('#mush-name').val();
+  const size = $('#mush-size').val();
+  const location = $('#mush-location').val();
+  const weight = $('#mush-weight').val() * 1;
+  const file = document.getElementById('mush-image').files[0];
+
+  if (!name || !size || !location || !weight || !file) {
+    $('#new-mush-validate').fadeIn();
+    $('#new-mush-validate').html('*All fields are required');
+    setTimeout(() => {
+      $('#new-mush-validate').fadeOut();
+    }, 2000);
+    return;
+  }
+
+  const image = file.name;
+  const ref = firebase.storage().ref(`mushrooms/${image}`);
+
   const newMush = {
-    name: $('#mush-name').val(),
-    size: $('#mush-size').val(),
-    location: $('#mush-location').val(),
-    weight: $('#mush-weight').val() * 1,
+    name,
+    size,
+    location,
+    weight,
+    image: '',
   };
 
-  mushroomData.addMushroom(newMush)
-    .then(() => {
-      // eslint-disable-next-line no-use-before-define
-      buildForest();
-      utils.printToDom('#new-shroom', '');
-    })
+  ref.put(file).then(() => {
+    ref.getDownloadURL().then((url) => {
+      newMush.image = url;
+      mushroomData.addMushroom(newMush).then(() => {
+        // eslint-disable-next-line no-use-before-define
+        buildForest();
+      });
+    });
+    utils.printToDom('#new-shroom', '');
+  })
     .catch((err) => console.error('could not add mushroom', err));
 };
 
@@ -98,7 +124,6 @@ const buildForest = () => {
     .then((mushrooms) => {
       let domString = `
         <h2 class="text-center">Forest</h2>
-        <button class="btn btn-success" id="show-add-mush"><i class="fas fa-ad"></i> New Shroom</button>
         <div class="d-flex flex-wrap">
       `;
 
